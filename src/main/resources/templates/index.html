@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>index</title>
+    <script src="../static/jquery-3.1.1.min.js" th:src="@{/jquery-3.1.1.min.js}"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#ajax1').bind('click', function () {
+
+//                var _foo = "jack";
+//                var _fruit = "orange";
+
+                var _data = {
+                    foo : 'jack',
+                    fruit: 'orange'
+                };
+
+                $.ajax({
+                    url : '/ajaxStringGet',
+                    type: 'get',
+                    data: _data,
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function(data,status,er) {
+                        alert("error: "+data+" status: "+status+" er:"+er);
+                    }
+                });
+
+            });
+
+
+            $('#ajax2').bind('click', function () {
+
+                var _data = {
+                    foo : 'jack',
+                    fruit: 'orange'
+                };
+
+                $.ajax({
+                    url : '/ajaxJsonPost',
+                    type: 'post',
+                    // 请求的数据格式
+                    contentType: "application/json",
+                    data: JSON.stringify(_data),
+                    success: function (data) {
+                        alert(data);
+                        alert(data.foo +' ' + data.fruit);
+                    },
+                    error: function(data,status,er) {
+                        alert("error: "+data+" status: "+status+" er:"+er);
+                    }
+
+                    // 响应的数据格式
+                   // dataType: ""
+                });
+
+            });
+
+            $('#ajax3').bind('click', function () {
+
+                var _array = new Array();
+//                _array.push({foo: "tom", fruit: "apple"});
+//                _array.push({foo: "jack", fruit: "banana"});
+//                _array.push({foo: "lisa", fruit: "orange"});
+                _array[0] = {foo: "tom1", fruit: "apple1"};
+                _array[1] = {foo: "tom2", fruit: "apple2"};
+                _array[2] = {foo: "tom3", fruit: "apple3"};
+
+                $.ajax({
+                    url : '/ajaxJsonsPost',
+                    type: 'post',
+                    // 请求的数据格式
+                    contentType: "application/json",
+                    data: JSON.stringify(_array),
+                    success: function (data) {
+                        alert(data);
+                        //alert(data.foo +' ' + data.fruit);
+                    },
+                    error: function(data,status,er) {
+                        alert("error: "+data+" status: "+status+" er:"+er);
+                    }
+
+                    // 响应的数据格式
+                    // dataType: ""
+                });
+
+            });
+
+        });
+    </script>
+</head>
+<body>
+
+    <!--
+       普通数据
+       get: url?key=value&key=value
+       post: key=value?key=value
+
+    -->
+
+     <a href="getURL" th:href="@{/getURL(foo=${javaBean.foo}, fruit=${javaBean.fruit})}">GetURL</a>
+
+     <hr/>
+
+    <form th:action="@{/postForm}" method="post">
+        <fieldset>
+            <legend>Form Data</legend>
+            foo <input type="text" name="foo"/>
+            fruit <input type="text" name="fruit"/>
+            <input type="submit" value="Submit" />
+        </fieldset>
+    </form>
+
+    <hr/>
+
+    <button id="ajax1">Ajax1</button> <button id="ajax2">Ajax2</button>
+    <button id="ajax3">Ajax3</button>
+
+</body>
+</html>
